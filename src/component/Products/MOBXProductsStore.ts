@@ -38,7 +38,7 @@ class ProductStore {
     }
   }
 
-  async searchProducts(query) {
+  async searchProducts(query: string) {
     this.isLoading = true;
     try {
       const res = await axios.get(`https://dummyjson.com/products/search?q=${query}`);
@@ -53,13 +53,13 @@ class ProductStore {
     };
   };
 
- async filterCategories (category) {
+ async filterCategories (category: string) {
     this.isLoading = true;
     try {
       const res = await axios.get(`https://dummyjson.com/products/category/${category}`);
       this.products = res.data.products
     }
-    catch {
+    catch(error) {
       console.error("Categories fetching error ", error);
     } 
     finally {
