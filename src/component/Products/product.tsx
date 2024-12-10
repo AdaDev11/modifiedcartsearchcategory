@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import productStore from "./MOBXProductsStore";
 import { Card, Image, Pagination, Loader, Text, Modal, Button, Stack, Divider, Group } from "@mantine/core";
@@ -30,7 +30,7 @@ const OrderForm = observer(() => {
     productStore.searchProducts(query);
   }, 300);
   
-  const handelSearch = (event) => {
+  const handelSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     setSearch(query);
     console.log(query);
@@ -41,7 +41,7 @@ const OrderForm = observer(() => {
     }
   };
   
- const handleCategory = async (category) => {
+ const handleCategory = async (category: string) => {
     await productStore.filterCategories(category);
   };
 
