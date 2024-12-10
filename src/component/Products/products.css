@@ -1,0 +1,76 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.cardContainer {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    display: block;
+}
+
+.cardDiv {
+    min-height: 300px;
+    border: 1px solid black;
+}
+
+.priceBtn {
+    width: auto;
+    height: 20px;
+}
+
+.toCard {
+    width: auto;
+    height: auto;
+}
+
+
+body {
+    background-color: #f9f9f9;
+    color: #333;
+    font-family: Arial, sans-serif;
+  }
+  
+  .products-container {
+    padding: 20px;
+    background-color: #fff;
+    min-height: 100vh;
+  }
+  
+  .mantine-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .mantine-card:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  .center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.5s ease-in-out;
+  color: var(--mantine-color-blue-light-color);
+    --button-bd: calc(0.0625rem* var(--mantine-scale)) solid
+}
+
+.visible {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease-in-out;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
