@@ -10,14 +10,6 @@ export interface Product {
     description: string;
 }
 
-export interface User {
-    id: number;
-    firstName: string;
-    lastName: string;
-    maidenName: string;
-    age: number;
-    gender: string;
-}
 
 class ProductStore {
     products: Product[] = [];
@@ -74,41 +66,6 @@ class ProductStore {
             this.products = res.data.products;
         } catch (error) {
             console.error("Categories fetching error ", error);
-        } finally {
-            this.isLoading = false;
-        }
-    }
-
-    async fetchUsers() {
-        this.isLoading = true;
-        try {
-            const res = await axios.get(`https://dummyjson.com/users`);
-            this.users = res.data.users;
-            console.log(this.users);
-        } catch (error) {
-            console.error("Fetching users error: ", error);
-        } finally {
-            this.isLoading = false;
-        }
-    }
-
-    async authory() {
-        this.isLoading = true;
-        try {
-            const res = await axios.get(`https://dummyjson.com/auth/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: "emilys",
-                    password: "emilyspass",
-                    expiresInMins: 30,
-                }),
-                credentials: "include",
-            });
-            this.products = res.data.users;
-            console.log(this.products);
-        } catch (error) {
-            console.error("Error fetching authentication: ", error);
         } finally {
             this.isLoading = false;
         }
