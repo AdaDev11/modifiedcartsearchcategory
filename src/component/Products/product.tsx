@@ -195,7 +195,6 @@ const OrderForm = observer(() => {
                         onClick={() => {
                             alert("Order placed successfully!");
                             setOrderModalOpened(false);
-                            productStore.clearCart();
                         }}
                     >
                         Confirm Order
