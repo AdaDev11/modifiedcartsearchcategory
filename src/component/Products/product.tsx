@@ -21,8 +21,6 @@ import {
 import "@mantine/core/styles.css";
 import { debounce } from "lodash";
 import { useForm } from "@mantine/form";
-import { MantineLogo } from "@mantinex/mantine-logo";
-import { IconSearch, IconShoppingCart } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import "./products.css";
 
@@ -97,10 +95,6 @@ const OrderForm = observer(() => {
 
     const autentifikation = async () => {
         await productStore.authory();
-    };
-
-    const handleOrder = () => {
-        setOrderModalOpened(true);
     };
 
     return (
@@ -307,7 +301,6 @@ const OrderForm = observer(() => {
                             size="sm"
                             hiddenFrom="sm"
                         />
-                        <MantineLogo size={28} />
                     </Group>
 
                     <Group className="links">
@@ -316,7 +309,6 @@ const OrderForm = observer(() => {
                             className="link"
                             onClick={handleOpenCart}
                         >
-                            <IconShoppingCart size={24} />
                             <span className="cartCount">
                                 {productStore.cart.length}
                             </span>
@@ -370,7 +362,6 @@ const OrderForm = observer(() => {
                         placeholder="Search products"
                         value={search}
                         onChange={handelSearch}
-                        leftSection={<IconSearch size={16} stroke={1.5} />}
                     />
                 </div>
             </header>
