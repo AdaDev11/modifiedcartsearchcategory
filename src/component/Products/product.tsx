@@ -263,12 +263,11 @@ const OrderForm = observer(() => {
                             <Button
                                 variant="filled"
                                 color="green"
-                                onClick={() => {
-                                    setOrderModalOpened(true) &
-                                        handleCloseCart();
-                                    storeLimit.clearCart();
-                                    alert("Order placed successfully!");
-                                }}
+                              onClick={() => {
+                                setOrderModalOpened(true); 
+                                handleCloseCart(); 
+                                 alert("Order placed successfully!");
+                                    }}
                             >
                                 Confirm Order
                             </Button>
@@ -351,8 +350,9 @@ const OrderForm = observer(() => {
             <h1>Products</h1>
 
             <Pagination
+               
                 total={Math.ceil(
-                    productStore.totalProducts / productStore.limit
+                    (Number(productStore.totalProducts) || 0) / (Number(productStore.limit) || 1)
                 )}
                 onChange={(page) => productStore.setPage(page)}
                 className="pagination"
