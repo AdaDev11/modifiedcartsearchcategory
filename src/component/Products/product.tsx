@@ -15,7 +15,6 @@ import {
     TextInput,
     Checkbox,
     Burger,
-    Autocomplete,
     Anchor,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
@@ -23,13 +22,6 @@ import { debounce } from "lodash";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import "./products.css";
-
-const scaleY = {
-    in: { opacity: 1, transform: "scaleY(1)" },
-    out: { opacity: 0, transform: "scaleY(9)" },
-    common: { transformOrigin: "top", transition: `all 0.2s ease-in-out` },
-    transitionProperty: "transform, opacity",
-};
 
 const OrderForm = observer(() => {
     interface Product {
@@ -43,7 +35,6 @@ const OrderForm = observer(() => {
 
     useEffect(() => {
         productStore.fetchProducts();
-        productStore.fetchUsers();
     }, []);
 
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(
@@ -93,10 +84,6 @@ const OrderForm = observer(() => {
         console.log("category" + value);
     };
 
-    const autentifikation = async () => {
-        await productStore.authory();
-    };
-
     return (
         <>
             {selectedProduct && (
@@ -128,14 +115,13 @@ const OrderForm = observer(() => {
                 opened={orderModalOpened}
                 onClose={() => setOrderModalOpened(false)}
                 title="Confirm Your Order"
-                size="lg"
             >
-                <Stack spacing="lg">
-                    <Text weight={700} size="xl">
+                <Stack>
+                    <Text>
                         Order Summary
                     </Text>
                     {productStore.cart.map(({ product, quantity }) => (
-                        <Group key={product.id} position="apart">
+                        <Group key={product.id}>
                             <Text>{product.title}</Text>
                             <Text>x{quantity}</Text>
                             <Text>
@@ -144,7 +130,7 @@ const OrderForm = observer(() => {
                         </Group>
                     ))}
                     <Divider />
-                    <Text weight={700} size="xl">
+                    <Text>
                         Total: ${productStore.totalPrice.toFixed(2)}
                     </Text>
 
@@ -206,7 +192,6 @@ const OrderForm = observer(() => {
                     opened={cartOpened}
                     onClose={handleCloseCart}
                     title="Shopping Cart"
-                    size="lg"
                 >
                     {productStore.cart.length === 0 ? (
                         <Text>Cart is empty</Text>
@@ -251,7 +236,7 @@ const OrderForm = observer(() => {
                                                     +
                                                 </Button>
                                             </Group>
-                                            <Text size="sm">
+                                            <Text>
                                                 {(
                                                     product.price * quantity
                                                 ).toFixed(2)}
@@ -272,7 +257,7 @@ const OrderForm = observer(() => {
                                 </Card>
                             ))}
                             <Divider />
-                            <Text style={{ weight: "700px" }} size="xl">
+                            <Text>
                                 Total: {productStore.totalPrice.toFixed(2)}$
                             </Text>
                             <Button
@@ -297,7 +282,6 @@ const OrderForm = observer(() => {
                         <Burger
                             opened={opened}
                             onClick={toggle}
-                            size="sm"
                             hiddenFrom="sm"
                         />
                     </Group>
@@ -375,7 +359,7 @@ const OrderForm = observer(() => {
             />
             {productStore.isLoading ? (
                 <div className="loader">
-                    <Loader size="lg" />
+                    <Loader/>
                 </div>
             ) : (
                 <div className="product-grid">
