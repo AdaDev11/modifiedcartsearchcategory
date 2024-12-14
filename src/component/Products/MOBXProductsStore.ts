@@ -19,7 +19,6 @@ class ProductStore {
     skip: number = 0;
     searchQuery: string = "";
     cart: { product: Product; quantity: number }[] = [];
-    users: User[] = [];
 
     constructor() {
         makeAutoObservable(this);
