@@ -10,6 +10,7 @@ export interface Product {
     images: string[];
     description: string;
     quantity: number;
+    thumbnail: string;
 }
 
 configure({
@@ -102,7 +103,7 @@ class ProductStore {
         this.fetchProducts();
     }
 
-    async addToCart(userId: number, products: Product[]) {
+    async addToCart(userId: number, products: Product) {
         try {
             const newProduct = products[0];
             const existingItem = this.cart.find(
@@ -126,7 +127,7 @@ class ProductStore {
 
                 const cartData = res.data;
 
-                const newCart = cartData.products.map((product: Product[]) => ({
+                const newCart = cartData.products.map((product: Product) => ({
                     product: {
                         id: product.id,
                         title: product.title,
