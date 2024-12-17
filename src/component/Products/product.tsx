@@ -22,9 +22,7 @@ import { debounce } from "lodash";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import "./products.css";
-import { IconSearch, IconShoppingCart } from "@tabler/icons-react";
 import "@mantinex/mantine-logo/styles.css";
-import { MantineLogo } from "@mantinex/mantine-logo";
 
 const OrderForm = observer(() => {
     interface Product {
@@ -51,7 +49,6 @@ const OrderForm = observer(() => {
     const [selectCategoryValue, setSelectCategoryValue] = useState("");
     const [orderModalOpened, setOrderModalOpened] = useState(false);
     const [opened, { toggle }] = useDisclosure(false);
-    const [allCartUse, setAllCartUse] = useState();
 
     const form = useForm({
         mode: "uncontrolled",
@@ -87,11 +84,7 @@ const OrderForm = observer(() => {
         setSelectCategoryValue(value);
         console.log("category" + value);
     };
-
-    const sortproductsAscDesc = () => {
-        productStore.sortproductsAscDesc();
-    };
-
+    
     return (
         <>
             {selectedProduct && (
@@ -198,12 +191,10 @@ const OrderForm = observer(() => {
                     onClose={handleCloseCart}
                     title="Shopping Cart"
                 >
-                    {/* Savatcha bo'sh bo'lsa */}
                     {productStore.cart.length === 0 ? (
                         <Text>Cart is empty</Text>
                     ) : (
                         <Stack>
-                            {/* Savatchadagi mahsulotlar */}
                             {productStore.cart.map(({ product, quantity }) => (
                                 <Card
                                     key={product.id}
@@ -212,9 +203,8 @@ const OrderForm = observer(() => {
                                     radius="md"
                                 >
                                     <Group>
-                                        {/* Mahsulot rasmi */}
                                         <Image
-                                            src={product.thumbnail}
+                                            src={product.images[0]}
                                             alt={product.title}
                                             width={50}
                                             height={50}
@@ -223,7 +213,6 @@ const OrderForm = observer(() => {
                                             {/* Mahsulot nomi */}
                                             <Text>{product.title}</Text>
                                             <Group>
-                                                {/* Miqdorni kamaytirish */}
                                                 <Button
                                                     onClick={() =>
                                                         productStore.changeQuantity(
@@ -235,7 +224,6 @@ const OrderForm = observer(() => {
                                                     -
                                                 </Button>
                                                 <Text>{quantity}</Text>
-                                                {/* Miqdorni oshirish */}
                                                 <Button
                                                     onClick={() =>
                                                         productStore.changeQuantity(
@@ -247,7 +235,6 @@ const OrderForm = observer(() => {
                                                     +
                                                 </Button>
                                             </Group>
-                                            {/* Mahsulot narxi */}
                                             <Text>
                                                 Total:{" "}
                                                 {(
@@ -256,7 +243,6 @@ const OrderForm = observer(() => {
                                                 $
                                             </Text>
                                         </Stack>
-                                        {/* Savatchadan mahsulotni o'chirish */}
                                         <Button
                                             color="red"
                                             onClick={() =>
@@ -271,12 +257,10 @@ const OrderForm = observer(() => {
                                 </Card>
                             ))}
 
-                            {/* Umumiy ma'lumotlar */}
                             <Divider />
                             <Text>
                                 Total: {productStore.totalPrice.toFixed(2)}$
                             </Text>
-                            {/* Buyurtmani tasdiqlash */}
                             <Button
                                 variant="filled"
                                 color="green"
@@ -300,7 +284,6 @@ const OrderForm = observer(() => {
                             onClick={toggle}
                             hiddenFrom="sm"
                         />
-                        <MantineLogo size={28} />
                     </Group>
 
                     <Group className="links">
@@ -309,7 +292,6 @@ const OrderForm = observer(() => {
                             className="link"
                             onClick={handleOpenCart}
                         >
-                            <IconShoppingCart size={24} />
 
                             <span className="cartCount">
                                 {productStore.cart.length}
