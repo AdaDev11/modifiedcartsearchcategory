@@ -22,6 +22,9 @@ import { debounce } from "lodash";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import "./products.css";
+import { IconSearch, IconShoppingCart } from "@tabler/icons-react";
+import "@mantinex/mantine-logo/styles.css";
+import { MantineLogo } from "@mantinex/mantine-logo";
 
 const OrderForm = observer(() => {
     interface Product {
@@ -48,6 +51,7 @@ const OrderForm = observer(() => {
     const [selectCategoryValue, setSelectCategoryValue] = useState("");
     const [orderModalOpened, setOrderModalOpened] = useState(false);
     const [opened, { toggle }] = useDisclosure(false);
+    const [allCartUse, setAllCartUse] = useState();
 
     const form = useForm({
         mode: "uncontrolled",
@@ -84,6 +88,10 @@ const OrderForm = observer(() => {
         console.log("category" + value);
     };
 
+    const sortproductsAscDesc = () => {
+        productStore.sortproductsAscDesc();
+    };
+
     return (
         <>
             {selectedProduct && (
@@ -117,9 +125,7 @@ const OrderForm = observer(() => {
                 title="Confirm Your Order"
             >
                 <Stack>
-                    <Text>
-                        Order Summary
-                    </Text>
+                    <Text>Order Summary</Text>
                     {productStore.cart.map(({ product, quantity }) => (
                         <Group key={product.id}>
                             <Text>{product.title}</Text>
@@ -130,9 +136,7 @@ const OrderForm = observer(() => {
                         </Group>
                     ))}
                     <Divider />
-                    <Text>
-                        Total: ${productStore.totalPrice.toFixed(2)}
-                    </Text>
+                    <Text>Total: ${productStore.totalPrice.toFixed(2)}</Text>
 
                     <form
                         onSubmit={form.onSubmit((values) =>
@@ -187,16 +191,19 @@ const OrderForm = observer(() => {
                     </Button>
                 </Stack>
             </Modal>
+
             {cartOpened && (
                 <Modal
                     opened={cartOpened}
                     onClose={handleCloseCart}
                     title="Shopping Cart"
                 >
+                    {/* Savatcha bo'sh bo'lsa */}
                     {productStore.cart.length === 0 ? (
                         <Text>Cart is empty</Text>
                     ) : (
                         <Stack>
+                            {/* Savatchadagi mahsulotlar */}
                             {productStore.cart.map(({ product, quantity }) => (
                                 <Card
                                     key={product.id}
@@ -205,15 +212,18 @@ const OrderForm = observer(() => {
                                     radius="md"
                                 >
                                     <Group>
+                                        {/* Mahsulot rasmi */}
                                         <Image
-                                            src={product.images[0]}
+                                            src={product.thumbnail}
                                             alt={product.title}
                                             width={50}
                                             height={50}
                                         />
                                         <Stack style={{ flex: 1 }}>
+                                            {/* Mahsulot nomi */}
                                             <Text>{product.title}</Text>
                                             <Group>
+                                                {/* Miqdorni kamaytirish */}
                                                 <Button
                                                     onClick={() =>
                                                         productStore.changeQuantity(
@@ -225,6 +235,7 @@ const OrderForm = observer(() => {
                                                     -
                                                 </Button>
                                                 <Text>{quantity}</Text>
+                                                {/* Miqdorni oshirish */}
                                                 <Button
                                                     onClick={() =>
                                                         productStore.changeQuantity(
@@ -236,13 +247,16 @@ const OrderForm = observer(() => {
                                                     +
                                                 </Button>
                                             </Group>
+                                            {/* Mahsulot narxi */}
                                             <Text>
+                                                Total:{" "}
                                                 {(
                                                     product.price * quantity
                                                 ).toFixed(2)}
                                                 $
                                             </Text>
                                         </Stack>
+                                        {/* Savatchadan mahsulotni o'chirish */}
                                         <Button
                                             color="red"
                                             onClick={() =>
@@ -256,18 +270,20 @@ const OrderForm = observer(() => {
                                     </Group>
                                 </Card>
                             ))}
+
+                            {/* Umumiy ma'lumotlar */}
                             <Divider />
                             <Text>
                                 Total: {productStore.totalPrice.toFixed(2)}$
                             </Text>
+                            {/* Buyurtmani tasdiqlash */}
                             <Button
                                 variant="filled"
                                 color="green"
-                              onClick={() => {
-                                setOrderModalOpened(true); 
-                                handleCloseCart(); 
-                                 alert("Order placed successfully!");
-                                    }}
+                                onClick={() => {
+                                    alert("Order placed successfully!");
+                                    handleCloseCart();
+                                }}
                             >
                                 Confirm Order
                             </Button>
@@ -275,6 +291,7 @@ const OrderForm = observer(() => {
                     )}
                 </Modal>
             )}
+
             <header className="header">
                 <div className="inner">
                     <Group className="links">
@@ -283,6 +300,7 @@ const OrderForm = observer(() => {
                             onClick={toggle}
                             hiddenFrom="sm"
                         />
+                        <MantineLogo size={28} />
                     </Group>
 
                     <Group className="links">
@@ -291,6 +309,8 @@ const OrderForm = observer(() => {
                             className="link"
                             onClick={handleOpenCart}
                         >
+                            <IconShoppingCart size={24} />
+
                             <span className="cartCount">
                                 {productStore.cart.length}
                             </span>
@@ -337,6 +357,16 @@ const OrderForm = observer(() => {
                                 </option>
                             </select>
                         </Anchor>
+
+                        <Anchor>
+                            <button
+                                onClick={() =>
+                                    productStore.sortproductsAscDesc()
+                                }
+                            >
+                                A-Z / Z-A
+                            </button>
+                        </Anchor>
                     </Group>
 
                     <input
@@ -350,16 +380,16 @@ const OrderForm = observer(() => {
             <h1>Products</h1>
 
             <Pagination
-               
                 total={Math.ceil(
-                    (Number(productStore.totalProducts) || 0) / (Number(productStore.limit) || 1)
+                    (Number(productStore.totalProducts) || 0) /
+                        (Number(productStore.limit) || 1)
                 )}
                 onChange={(page) => productStore.setPage(page)}
                 className="pagination"
             />
             {productStore.isLoading ? (
                 <div className="loader">
-                    <Loader/>
+                    <Loader />
                 </div>
             ) : (
                 <div className="product-grid">
@@ -385,7 +415,9 @@ const OrderForm = observer(() => {
                                 </button>
                                 <button
                                     onClick={() =>
-                                        productStore.addToCart(product)
+                                        productStore.addToCart(1, [
+                                            { id: product.id, quantity: 1 },
+                                        ])
                                     }
                                 >
                                     Add to Cart
