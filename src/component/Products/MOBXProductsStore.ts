@@ -9,6 +9,7 @@ export interface Product {
     price: number;
     images: string[];
     description: string;
+    quantity: number;
 }
 
 configure({
@@ -125,7 +126,7 @@ class ProductStore {
 
                 const cartData = res.data;
 
-                const newCart = cartData.products.map((product) => ({
+                const newCart = cartData.products.map((product: Product[]) => ({
                     product: {
                         id: product.id,
                         title: product.title,
