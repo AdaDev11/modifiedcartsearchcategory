@@ -103,7 +103,7 @@ class ProductStore {
         this.fetchProducts();
     }
 
-    async addToCart(userId: number, products: Product) {
+    async addToCart(userId: number, products: { product: Product; quantity: number }[]) {
         try {
             const newProduct = products[0];
             const existingItem = this.cart.find(
