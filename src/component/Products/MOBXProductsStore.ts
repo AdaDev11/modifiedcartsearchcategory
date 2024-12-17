@@ -1,5 +1,6 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import axios from "axios";
+import { configure } from "mobx";
 
 export interface Product {
     id: number;
@@ -10,6 +11,9 @@ export interface Product {
     description: string;
 }
 
+configure({
+    enforceActions: "always",
+});
 
 class ProductStore {
     products: Product[] = [];
@@ -19,6 +23,8 @@ class ProductStore {
     skip: number = 0;
     searchQuery: string = "";
     cart: { product: Product; quantity: number }[] = [];
+    cartAll: { product: Product; quantity: number }[] = [];
+    asc: string = "asc";
 
     constructor() {
         makeAutoObservable(this);
@@ -32,10 +38,15 @@ class ProductStore {
             );
             this.products = response.data.products;
             this.totalProducts = response.data.total;
+            runInAction(() => {
+                this.totalProducts = data.length;
+            });
         } catch (error) {
             console.error("Error fetch:", error);
         } finally {
-            this.isLoading = false;
+            runInAction(() => {
+                this.isLoading = false;
+            });
         }
     }
 
@@ -70,9 +81,20 @@ class ProductStore {
         }
     }
 
-    setSearchQuery(query: string) {
-        this.searchQuery = query;
-        this.searchProducts(query);
+    async sortproductsAscDesc() {
+        this.isLoading = true;
+        try {
+            const res = await axios.get(
+                `https://dummyjson.com/products?sortBy=title&order=${this.asc}`
+            );
+            this.products = res.data.products;
+            this.asc = this.asc === "asc" ? "desc" : "asc";
+            console.log(products);
+        } catch (eror) {
+            console.error("Sorting products error: ", error);
+        } finally {
+            this.isLoading = false;
+        }
     }
 
     setPage(page: number) {
@@ -80,17 +102,50 @@ class ProductStore {
         this.fetchProducts();
     }
 
-    addToCart = (product: Product) => {
-        const item = this.cart.find(
-            (cartItem) => cartItem.product.id === product.id
-        );
-        console.log(this.cart);
-        if (item) {
-            item.quantity += 1;
-        } else {
-            this.cart.push({ product, quantity: 1 });
+    async addToCart(userId, products) {
+        try {
+            const newProduct = products[0];
+            const existingItem = this.cart.find(
+                (item) => item.product.id === newProduct.id
+            );
+
+            if (existingItem) {
+                existingItem.quantity += newProduct.quantity;
+                this.changeQuantity(
+                    existingItem.product.id,
+                    existingItem.quantity
+                );
+            } else {
+                const res = await axios.post(
+                    "https://dummyjson.com/carts/add",
+                    {
+                        userId,
+                        products,
+                    }
+                );
+
+                const cartData = res.data;
+
+                const newCart = cartData.products.map((product) => ({
+                    product: {
+                        id: product.id,
+                        title: product.title,
+                        price: product.price,
+                        thumbnail: product.thumbnail,
+                    },
+                    quantity: product.quantity,
+                    total: product.total,
+                    discountedPrice: product.discountedPrice,
+                }));
+
+                this.cart = [...this.cart, ...newCart];
+            }
+
+            console.log("Updated cart:", this.cart);
+        } catch (error) {
+            console.error("Add to cart error:", error);
         }
-    };
+    }
 
     get totalPrice() {
         return this.cart.reduce(
