@@ -97,15 +97,10 @@ const OrderForm = observer(() => {
                         src={selectedProduct.images[0]}
                         alt={selectedProduct.title}
                         height={200}
-                        fit="cover"
                     />
                     <Text>{selectedProduct.description}</Text>
                     <Text>{selectedProduct.price}$</Text>
                     <Button
-                        variant="light"
-                        color="blue"
-                        fullWidth
-                        mt="md"
                         onClick={() => productStore.addToCart(selectedProduct)}
                     >
                         Add to Cart
@@ -138,24 +133,18 @@ const OrderForm = observer(() => {
                     >
                         <Stack>
                             <TextInput
-                                withAsterisk
-                                label="Name"
                                 placeholder="Name"
                                 key={form.key("name")}
                                 {...form.getInputProps("name")}
                             />
 
                             <TextInput
-                                withAsterisk
-                                label="Name"
                                 placeholder="Addres"
                                 key={form.key("addres")}
                                 {...form.getInputProps("addres")}
                             />
 
                             <TextInput
-                                withAsterisk
-                                label="Name"
                                 placeholder="Phone number"
                                 key={form.key("phone number")}
                                 {...form.getInputProps("phone number")}
@@ -164,7 +153,6 @@ const OrderForm = observer(() => {
                     </form>
 
                     <Checkbox
-                        mt="md"
                         label="I agree to sell my privacy"
                         key={form.key("termsOfService")}
                         {...form.getInputProps("termsOfService", {
@@ -198,9 +186,6 @@ const OrderForm = observer(() => {
                             {productStore.cart.map(({ product, quantity }) => (
                                 <Card
                                     key={product.id}
-                                    shadow="sm"
-                                    padding="lg"
-                                    radius="md"
                                 >
                                     <Group>
                                         <Image
