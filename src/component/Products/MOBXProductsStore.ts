@@ -39,7 +39,7 @@ class ProductStore {
             this.products = response.data.products;
             this.totalProducts = response.data.total;
             runInAction(() => {
-                this.totalProducts = data.length;
+                this.totalProducts = response.data.length;
             });
         } catch (error) {
             console.error("Error fetch:", error);
@@ -89,8 +89,7 @@ class ProductStore {
             );
             this.products = res.data.products;
             this.asc = this.asc === "asc" ? "desc" : "asc";
-            console.log(products);
-        } catch (eror) {
+        } catch (error) {
             console.error("Sorting products error: ", error);
         } finally {
             this.isLoading = false;
@@ -102,7 +101,7 @@ class ProductStore {
         this.fetchProducts();
     }
 
-    async addToCart(userId, products) {
+    async addToCart(userId: number, products: Product[]) {
         try {
             const newProduct = products[0];
             const existingItem = this.cart.find(
