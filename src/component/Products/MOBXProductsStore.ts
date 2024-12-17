@@ -11,6 +11,8 @@ export interface Product {
     description: string;
     quantity: number;
     thumbnail: string;
+    discountedPrice: number;
+    total: number;
 }
 
 configure({
@@ -103,7 +105,7 @@ class ProductStore {
         this.fetchProducts();
     }
 
-    async addToCart(userId: number, products: { product: Product; quantity: number }[]) {
+    async addToCart(userId: number, products: { product: Product }[]) {
         try {
             const newProduct = products[0];
             const existingItem = this.cart.find(
