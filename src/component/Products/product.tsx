@@ -101,7 +101,7 @@ const OrderForm = observer(() => {
                     <Text>{selectedProduct.description}</Text>
                     <Text>{selectedProduct.price}$</Text>
                     <Button
-                        onClick={() => productStore.addToCart(selectedProduct)}
+                        onClick={() => productStore.addToCart(1, selectedProduct)}
                     >
                         Add to Cart
                     </Button>
